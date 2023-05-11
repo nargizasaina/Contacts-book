@@ -1,0 +1,20 @@
+.container{
+  padding: 0 20px;
+}
+
+.search-wrapper{
+  width: 300px;
+  margin-left: auto;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media screen and (max-width: 599px) {
+  .title{
+    display: block;
+  }
+}

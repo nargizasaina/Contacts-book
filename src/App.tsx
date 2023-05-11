@@ -1,9 +1,14 @@
 import React from 'react';
+import ContactsBook from './containers/ContactsBook/ContactsBook';
+import Header from './components/Header/Header';
 
 const App = () => {
   return (
-    <div className="App">
-    </div>
+    <>
+      <Header/>
+      <ContactsBook/>
+    </>
+    
   );
 }
 
