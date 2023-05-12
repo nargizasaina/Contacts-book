@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
+import { Contact } from "../../types";
 import './ContactsBook.css';
 
 const Search = styled('div')(({ theme }) => ({
@@ -42,43 +43,55 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '200px',
     [theme.breakpoints.up('sm')]: {
-      width: '12ch',
+      width: '20ch',
       '&:focus': {
-        width: '20ch',
+        width: '25ch',
       },
     },
   },
 }));
 
-interface Contact {
-  id: number,
-  name: string,
-  username: string,
-  email: string,
-  phone: string,
-  website: string,
-  companyName: string
-}
-
 const ContactsBook = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [searchVal, setSearchVal] = useState<String>('');
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
+  const [searchVal, setSearchVal] = useState<string>('');
 
   useEffect(() => {
-    const ajax = () => {
-      const http = new XMLHttpRequest();
-      http.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-          localStorage.setItem('contacts-book', JSON.stringify(http.responseText));
-          setContacts(JSON.parse(http.responseText));
-        }
+    const localContacts = localStorage.getItem('contactsBook');
+    
+    // if (localContacts === null) {
+      const ajax = () => {
+        const http = new XMLHttpRequest();
+        http.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+            localStorage.setItem('contactsBook', JSON.stringify(http.responseText));
+            setContacts(JSON.parse(http.responseText));
+            console.log('ajax', contacts);
+          }
+        };
+        http.open("GET", "https://jsonplaceholder.typicode.com/users", true);
+        http.send();
       };
-      http.open("GET", "https://jsonplaceholder.typicode.com/users", true);
-      http.send();
-    };
-
-    ajax();
+  
+      ajax();
+    // } else{
+    //   const needed = JSON.parse(localContacts);
+    //   setContacts(needed);
+    //   console.log(needed);
+    // }
+    // console.log(contacts);
   }, []);
+
+  useEffect(() => {
+    if (searchVal.length > 0) {
+      const filteredData = contacts.filter(item => item.name.toLowerCase().includes(searchVal.toLowerCase()));
+      setFilteredContacts(filteredData);
+    } else {
+      setFilteredContacts(contacts);
+    }
+    
+  }, [searchVal, contacts]);
+
 
   return (
     <div className="container">
@@ -88,14 +101,16 @@ const ContactsBook = () => {
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
-            placeholder="Search…"
+            placeholder="Search by name…"
             inputProps={{ 'aria-label': 'search' }}
-            onChange={e => setSearchVal(e.target.value)}
+            onChange={e => setSearchVal((e.target.value).trim())}
           />
         </Search>
       </div>
       <div className="card-wrapper">
-        {contacts.map(item => (
+        {contacts[0]?.id && filteredContacts.map(item => (
+          
+
           <Card key={item.id} variant="outlined" sx={{ minWidth: 275, margin: '10px' }}>
             <CardContent>
               <Typography variant="h5" component="div">
