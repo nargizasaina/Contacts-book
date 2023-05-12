@@ -9,6 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
 import { Contact } from "../../types";
 import './ContactsBook.css';
+import ContactModal from "../../components/ContactModal/ContactModal";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -51,22 +52,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const getSorted = (arr:Contact[]) => {
+  return arr.sort((a: Contact, b: Contact) => (b.name > a.name ? -1 : 1));
+};
+
 const ContactsBook = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contact, setContact] = useState<Contact>();
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
-  const [searchVal, setSearchVal] = useState<string>('');
+  const [searchVal, setSearchVal] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const localContacts = localStorage.getItem('contactsBook');
     
-    // if (localContacts === null) {
+    if (localContacts === null) {
       const ajax = () => {
         const http = new XMLHttpRequest();
         http.onreadystatechange = function() {
           if (this.readyState === 4 && this.status === 200) {
-            localStorage.setItem('contactsBook', JSON.stringify(http.responseText));
-            setContacts(JSON.parse(http.responseText));
-            console.log('ajax', contacts);
+            localStorage.setItem('contactsBook', http.responseText);
+            setContacts(getSorted(JSON.parse(http.responseText)));
           }
         };
         http.open("GET", "https://jsonplaceholder.typicode.com/users", true);
@@ -74,24 +80,38 @@ const ContactsBook = () => {
       };
   
       ajax();
-    // } else{
-    //   const needed = JSON.parse(localContacts);
-    //   setContacts(needed);
-    //   console.log(needed);
-    // }
-    // console.log(contacts);
+    } else{
+      const needed = JSON.parse(localContacts);
+      setContacts(needed);
+    }
   }, []);
 
   useEffect(() => {
     if (searchVal.length > 0) {
       const filteredData = contacts.filter(item => item.name.toLowerCase().includes(searchVal.toLowerCase()));
-      setFilteredContacts(filteredData);
+      setFilteredContacts(getSorted(filteredData));
     } else {
-      setFilteredContacts(contacts);
+      setFilteredContacts(getSorted(contacts));
     }
     
   }, [searchVal, contacts]);
 
+  const handleOpen = (item: Contact) => {
+    setModalOpen(true);
+    setContact(item);
+  };
+
+  const handleClose = () => setModalOpen(false);
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target;
+    contact && setContact(prev => ({...prev, [name]: value}));
+    console.log(contact);
+  };
+
+  const onSubmit = (e: React.FormEventHandler<HTMLFormElement>) => {
+    const changedContacts = 
+  };
 
   return (
     <div className="container">
@@ -107,11 +127,23 @@ const ContactsBook = () => {
           />
         </Search>
       </div>
+      {contact && 
+        <ContactModal
+          modalOpen={modalOpen}
+          item={contact}
+          handleClose={handleClose}
+          onChange={onInputChange}
+          onSubmit={onSubmit}
+        />
+      }
       <div className="card-wrapper">
         {contacts[0]?.id && filteredContacts.map(item => (
-          
-
-          <Card key={item.id} variant="outlined" sx={{ minWidth: 275, margin: '10px' }}>
+          <Card 
+            key={item.id} 
+            variant="outlined" 
+            sx={{ width: 295, margin: '10px', cursor: 'pointer' }}
+            onClick={() => handleOpen(item)}
+          >
             <CardContent>
               <Typography variant="h5" component="div">
                 {item.name}
