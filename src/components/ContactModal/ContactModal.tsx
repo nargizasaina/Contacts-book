@@ -38,75 +38,73 @@ const ContactModal = ({ modalOpen, handleClose, item, onChange, onSubmit}: Modal
       >
         <Box sx={style}>
           <h3 className='title'>Edit contact</h3>
-
-          <Grid 
-            component="form"
-            container
-            textAlign="center"
-            onSubmit={onSubmit}
-          >
-            <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
-              <TextField 
-                label="Name" 
-                variant="outlined" 
-                value={item.name}
-                name="name"
-                onChange={onChange}
-                fullWidth
-              />
+          <form onSubmit={onSubmit}>
+            <Grid 
+              container
+              textAlign="center"
+            >
+              <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
+                <TextField 
+                  label="Name" 
+                  variant="outlined" 
+                  value={item.name}
+                  name="name"
+                  onChange={onChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
+                <TextField 
+                  label="Username" 
+                  variant="outlined" 
+                  value={item.username}
+                  name="username"
+                  onChange={onChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
+                <TextField 
+                  label="Phone number" 
+                  variant="outlined" 
+                  value={item.phone}
+                  name="phone"
+                  onChange={onChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
+                <TextField 
+                  label="Email" 
+                  variant="outlined" 
+                  value={item.email}
+                  name="email"
+                  onChange={onChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
+                <TextField 
+                  label="Website" 
+                  variant="outlined" 
+                  value={item.website}
+                  name="website"
+                  onChange={onChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item sx={{width: {xs: '100%', md: '49.5%'}, marginX: 'auto'}}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                >
+                  Save
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
-              <TextField 
-                label="Username" 
-                variant="outlined" 
-                value={item.username}
-                name="username"
-                onChange={onChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
-              <TextField 
-                label="Phone number" 
-                variant="outlined" 
-                value={item.phone}
-                name="phone"
-                onChange={onChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
-              <TextField 
-                label="Email" 
-                variant="outlined" 
-                value={item.email}
-                name="email"
-                onChange={onChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} md={8} sx={{margin: '10px auto'}}>
-              <TextField 
-                label="Website" 
-                variant="outlined" 
-                value={item.website}
-                name="website"
-                onChange={onChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item sx={{width: {xs: '100%', md: '49.5%'}, marginX: 'auto'}}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleClose}
-              >
-                Save
-              </Button>
-            </Grid>
-          </Grid>
+          </form>
         </Box>
       </Modal>
     </div>

@@ -110,13 +110,12 @@ const ContactsBook = () => {
     const contactsCopy = JSON.parse(JSON.stringify(contacts));
     Object.assign(contactsCopy.find((item: Contact) => item.id === contact?.id), contact);
     setContacts(contactsCopy);
-    console.log(contact);
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(contacts);
     localStorage.setItem('contactsBook', JSON.stringify(contacts));
+    handleClose();
   };
 
   return (
