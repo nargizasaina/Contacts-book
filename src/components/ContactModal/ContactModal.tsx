@@ -23,7 +23,7 @@ type ModalProps = {
   modalOpen: boolean, 
   handleClose: () => void,
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  onSubmit: () => void,
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
   item: Contact
 }
 
@@ -38,6 +38,7 @@ const ContactModal = ({ modalOpen, handleClose, item, onChange, onSubmit}: Modal
       >
         <Box sx={style}>
           <h3 className='title'>Edit contact</h3>
+
           <Grid 
             component="form"
             container
