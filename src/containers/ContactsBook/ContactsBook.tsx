@@ -103,12 +103,12 @@ const ContactsBook = () => {
 
   const handleClose = () => setModalOpen(false);
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
     contact && setContact({...contact, [name]: value});
     
     const contactsCopy = JSON.parse(JSON.stringify(contacts));
-    Object.assign(contactsCopy.find((item: Contact) => item.id === contact?.id), contact);
+    await Object.assign(contactsCopy.find((item: Contact) => item.id === contact?.id), contact);
     setContacts(contactsCopy);
   };
 
